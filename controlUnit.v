@@ -17,18 +17,20 @@ module controlUnit(
         ADDIEXECUTE=9,
         ADDIWRITEBACK=10,
         JUMP=11;
+    wire[2:0] alucontrol;
     reg [3:0] state;
     reg IorD;
     reg AluSrcA;
     reg [1:0] AlUSrcB;
     reg Aluop;
+    reg RegDst;
+    reg MemToReg;
     reg[1:0] PCSrc;
     reg IRWrite;
     reg PCWrite;
     reg Branch;
     reg MemWrite;
     reg RegWrite;
-    wire[2:0] alucontrol;
     reg[1:0] aluop;
     aludec ALUDecoder(.alucontrol(alucontrol),.funct(funct),.aluop(aluop));
     always @(posedge clk)
@@ -42,9 +44,59 @@ module controlUnit(
             PCSrc=0;
             IRWrite=1;
             PCWrite=1;
+            Branch=0;
+            MemWrite=0;
+            RegWrite=0;
+
         end
+        DECODE:begin
+            IRWrite=0;
+            PCWrite=0;
+            Branch=0;
+            MemWrite=0;
+            RegWrite=0;
+            AluSrcA=0;
+            AlUSrcB=2'b11;
+            Aluop=0;
+        end
+        MEMADR:
+        begin
+            AluSrcA=1;
+            AlUSrcB=2'b10;
+            Aluop=0;
+            IRWrite=0;
+            PCWrite=0;
+            Branch=0;
+            MemWrite=0;
+            RegWrite=0;
+        end
+        MEMREAD:
+        MEMWRITEBACK:
+        begin
+            IRWrite=0;
+            PCWrite=0;
+            Branch=0;
+            MemWrite=0;
+            RegWrite=0;
+        end
+        MEMWRITE:
+        begin
+        end
+        EXECUTE:
+        begin
+            AluSrcA=1;
+            AlUSrcB=2'b00;
+            Aluop=2'b10;
+        end
+        ALUWRITEBACK:
+        begin
+            RegDst=1;
+            MemToReg=0;
+            RegWrite=1;
+        end
+
+
     endcase
-        
     endmodule
 
 
