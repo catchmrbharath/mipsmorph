@@ -1,4 +1,3 @@
-`define imwidth 16
 `define adwidth 5
 `define datawidth 32
 module regfile #(parameter MEM=32)
@@ -11,7 +10,8 @@ module regfile #(parameter MEM=32)
     assign rd1 = registers[a1];
     assign rd2 = registers[a2];
     always @ (posedge clk)
-        if(wrenable) registers[a3]=wr;
+        if(wrenable) 
+			registers[a3]<=wr;
 endmodule
 
         
