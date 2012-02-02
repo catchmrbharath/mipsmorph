@@ -1,4 +1,3 @@
-`define instruct_mem 7
 `define size 31
 module instr #(parameter MEM=64)
 (
