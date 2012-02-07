@@ -3,8 +3,7 @@ module instr #(parameter MEM=64)
 (
     output[`size:0] out,
     input[`size:0] address,
-    input clk,writeEn,
-    input [`size:0] writeData);
+    input clk);
     reg [`size:0] mem[MEM-1:0];
     initial
     begin
