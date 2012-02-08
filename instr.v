@@ -8,6 +8,9 @@ module instr #(parameter MEM=18)
     initial
     begin
         $readmemh("instruction.txt",mem);
+		#5
+		$display("INSTRUCTION MEMORY");
+		$display("%h", mem[0]);
     end
     assign instruction = mem[address];
 endmodule
