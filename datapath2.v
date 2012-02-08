@@ -18,7 +18,7 @@ module Datapath(
     adder pcadd(pcplus1,32'b1,pc);
     adder pcadd2(pcbranch,signimm,pcplus1);
     mux2x1 #(32) pcbrmux(.out(pcnextbr),.sel(pcsrc),.q0(pcplus1),.q1(pcbranch));
-    mux2x1 #(32) pcmux(.out(pcnext),.sel(jump),.q0(pcnextbr),.q1({pcplus1[31:28],instr[27:0]}));
+    mux2x1 #(32) pcmux(.out(pcnext),.sel(jump),.q0(pcnextbr),.q1({pcplus1[31:26],instr[25:0]}));
 
 
     //register file stuff
