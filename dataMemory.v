@@ -1,21 +1,18 @@
 `define datawidth 32
 module DataMemory #(parameter MEM=64)
 (
-    output[`datawidth-1:0] RD,
+    output[`datawidth-1:0] rd,
     input[`datawidth-1:0] address,
-    input[`datawidth-1:0] writeData,
-    input writeEn
-    input clk,
-    input reset);
+    input[`datawidth-1:0] wd,
+    input we
+    input clk );
+
     reg[`datawidth-1:0] mem[MEM-1:0];
-    assign out = mem[address];
+
+    assign rd = mem[address[31:2]]; // WORD ALIGNED
+
     always @(posedge clk)
-    begin
-        if(writeEn)
-            mem[address]=writeData;
-    end
-
-
-
+        if(we)
+            mem[address[31:2]]<=wd;
   
-endmodule: DataMemory
+endmodule
