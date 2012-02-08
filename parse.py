@@ -44,7 +44,7 @@ for lines in f:
         rs = int(decode[1][1:])
         rt = int(decode[2][1:])
         rd = int(decode[3][1:])
-        bytecode = bytecode+binary(rs)+binary(rt)+binary(rd)+"00000"
+        bytecode =bytecode+binary(rs)+binary(rt)+binary(rd)+"00000"
         bytecode = bytecode+funct[decode[0]]
     print bytecode
         
