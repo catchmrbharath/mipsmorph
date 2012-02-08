@@ -1,11 +1,11 @@
 $date
-	Wed Feb  8 23:34:33 2012
+	Wed Feb  8 23:40:21 2012
 $end
 $version
 	Icarus Verilog
 $end
 $timescale
-	1ns
+	1s
 $end
 $scope module top_tb $end
 $var wire 32 ! dataadr [31:0] $end
