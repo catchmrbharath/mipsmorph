@@ -5,7 +5,8 @@ module top (
 	input clk,
 	input reset );
 	
-	wire [31:0] pc, instr, readdata;
+	wire [31:0]  instr, readdata;
+    reg [31:0] pc;
 	
 	mips mips(  .clk(clk),
 				.reset(reset),
@@ -16,7 +17,7 @@ module top (
 				.writedata(writedata),
 				.readdata(readdata) );
 				
-	instr imem( .address(pc[7:2]),
+	instr imem( .address(pc[5:0]),
 				.out(instr) );
 	
 	DataMemory dmem(	.rd(readdata),
@@ -24,5 +25,8 @@ module top (
 	 					.address(dataadr),
 						.we(memwrite),
 						.clk(clk) );
+    initial
+
+    $monitor($time,,,,"pcsrc = %d",instr);
 	
 endmodule
