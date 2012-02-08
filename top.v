@@ -12,7 +12,7 @@ module top (
 				.pc(pc),
 				.instr(instr),
 				.memwrite(memwrite),
-				.dataadr(dataadr),
+				.aluout(dataadr),
 				.writedata(writedata),
 				.readdata(readdata) );
 				

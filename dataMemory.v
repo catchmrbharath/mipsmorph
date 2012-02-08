@@ -4,7 +4,7 @@ module DataMemory #(parameter MEM=64)
     output[`datawidth-1:0] rd,
     input[`datawidth-1:0] address,
     input[`datawidth-1:0] wd,
-    input we
+    input we,
     input clk );
 
     reg[`datawidth-1:0] mem[MEM-1:0];
