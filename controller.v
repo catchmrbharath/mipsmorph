@@ -26,7 +26,7 @@ module controller (
 	
 	aludec ad (	.funct(funct),
 				.aluop(aluop),
-				.alucontrols(alucontrols) );
+				.alucontrol(alucontrol) );
 				
 	assign pcsrc = branch & zero;
 	

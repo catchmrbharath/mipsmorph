@@ -3,7 +3,7 @@ module mips (
 	output memwrite,
 	output [31:0] aluout,
 	output [31:0] writedata,
-	input [31:0] inst,
+	input [31:0] instr,
 	input [31:0] readdata,
 	input clk, 
 	input reset );
