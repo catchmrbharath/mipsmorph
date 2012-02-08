@@ -9,10 +9,14 @@ module DataMemory #(parameter MEM=64)
 
     reg[`datawidth-1:0] mem[MEM-1:0];
 
-    assign rd = mem[address[31:2]]; // WORD ALIGNED
+	initial begin
+		mem[0]=32'h00000000;
+	end
+
+    assign rd = mem[address[31:0]]; // WORD ALIGNED
 
     always @(posedge clk)
         if(we)
-            mem[address[31:2]]<=wd;
+            mem[address[31:0]]<=wd;
   
 endmodule
