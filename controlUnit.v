@@ -32,7 +32,7 @@ module controlUnit(
     reg MemWrite;
     reg RegWrite;
     reg[1:0] ALUOp;
-    aludec ALUDecoder(.alucontrol(alucontrol),.funct(funct),.ALUOp(ALUOp));
+    aludec ALUDecoder(.alucontrol(alucontrol),.funct(funct),.aluop(ALUOp));
     always @(posedge clk)
         case(state)
             FETCH:
