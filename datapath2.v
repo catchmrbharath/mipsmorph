@@ -14,7 +14,7 @@ module Datapath(
     wire[`datawidth-1:0] signimm,signimmsh; //are the same
     wire[`datawidth-1:0] srcA,srcB; 
     wire[`datawidth-1:0] result;
-    flipflop #(32) pcreg(.q(pcnext),.d(pc),.clk(clk),.reset(reset));
+    flipflop #(32) pcreg(.q(pc),.d(pcnext),.clk(clk),.reset(reset));
     adder pcadd(pcplus1,32'b1,pc);
     adder pcadd2(pcbranch,signimm,pcplus1);
     mux2x1 #(32) pcbrmux(.out(pcnextbr),.sel(pcsrc),.q0(pcplus1),.q1(pcbranch));
@@ -22,7 +22,7 @@ module Datapath(
 
 
     //register file stuff
-    regfile rg(.rd1(srcA),.rd2(writedata),.wr(writedata),.a1(instr[25:21]),.a2(instr[20:16]),.a3(writereg),.wrenable(regwrite),.clk(clk));
+    regfile rg(.rd1(srcA),.rd2(writedata),.wr(result),.a1(instr[25:21]),.a2(instr[20:16]),.a3(writereg),.wrenable(regwrite),.clk(clk));
     mux2x1 #(5) wrmux(.out(writereg),.q0(instr[20:16]),.q1(instr[15:11]),.sel(regdst));
     mux2x1 #32 resmux(.q0(aluout),.q1(readdata),.sel(memtoreg),.out(result));
    signExtend se(.out(signimm),.in(instr[15:0]));

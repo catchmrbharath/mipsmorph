@@ -17,9 +17,10 @@ module top_tb ();
 	always #5 clk <= ~clk;
 	
 	initial begin
+        #0
 		reset <= 1;
 		clk <= 0;
-		#25 
+		#20 
 		reset <= 0;
 	end
 	

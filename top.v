@@ -6,7 +6,7 @@ module top (
 	input reset );
 	
 	wire [31:0]  instr, readdata;
-    reg [31:0] pc;
+    wire [31:0] pc;
 	
 	mips mips(  .clk(clk),
 				.reset(reset),
@@ -25,8 +25,5 @@ module top (
 	 					.address(dataadr),
 						.we(memwrite),
 						.clk(clk) );
-    initial
-
-    $monitor($time,,,,"pcsrc = %d",instr);
 	
 endmodule

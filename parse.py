@@ -1,4 +1,3 @@
-from numpy import *
 def binary(x,bits=5):
     ans = ""
     if x >= 0: 

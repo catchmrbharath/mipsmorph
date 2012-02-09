@@ -12,5 +12,5 @@ module instr #(parameter MEM=18)
 		$display("INSTRUCTION MEMORY");
 		$display("%h", mem[0]);
     end
-    assign instruction = mem[address];
+    assign out= mem[address];
 endmodule
