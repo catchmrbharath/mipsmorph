@@ -20,7 +20,7 @@ module top (
 	instr imem( .address(pc[5:0]),
 				.out(instr) );
 	
-	DataMemory dmem(	.rd(readdata),
+	DataMemory #(128) dmem(	.rd(readdata),
 	 					.wd(writedata),
 	 					.address(dataadr),
 						.we(memwrite),
