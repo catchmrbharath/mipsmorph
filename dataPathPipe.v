@@ -19,9 +19,9 @@ module DatapathPipe(
 
 	/* outputs */
 	
-    output equalID,
+    output equalD,
     output [5:0] op,funct,
-    output [4:0] rsD,rtD,rsE,rtE, writeregE, writeRegM, writeRegW);
+    output [4:0] rsD,rtD,rsE,rtE, writeregE, writeregM, writeregW );
     
     /* temporary stuff */
     wire[31:0] resultW;
@@ -39,8 +39,8 @@ module DatapathPipe(
     wire[31:0] rd2;
     //wire[4:0] writeRegW; // should be an output along with writeRegM
     wire[31:0] aluoutM;
-    wire[31:0] equalidA;
-    wire[31:0] equalidB;
+    wire[31:0] equaldA;
+    wire[31:0] equaldB;
     wire[31:0] rd1E;
     wire[31:0] rd2E;
     wire[31:0] signimmE;
@@ -49,29 +49,28 @@ module DatapathPipe(
 	wire[31:0] writedataE;
     wire[31:0] writedataM;
     wire[95:0] readin;
-    
 
 
 
     mux2x1 #(32) pcsel(.out(pcnew),.q0(pcplus1),.q1(pcbranchD),.sel(pcsrcD));
     flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(stallF));
     adder pcadd(.sum(pcplus1),.a(pcnew),.b(1'b1));
-    instr #(32) instrmem(.out(RD),.in(pcF));
-    flipflopE #(63) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(pcsrcD),.reset(clearF));
+    instr #(32) instrmem(.out(RD),.address(pcF[5:0]));
+    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(pcsrcD),.reset(clearF));
     assign instrD = idin[63:32];
     assign pcplus1D = idin[31:0];
     assign op = instrD[31:26];
     assign funct = instrD[5:0];
-    regfile regmem(.rd1(rd1),.rd2(rd2),.a1(instrD[25:21]),.a2(instrD[20:16]),.a3(writeRegW),.wrenable(regwriteW),.clk(clk),.wr(resultW));
+    regfile regmem(.rd1(rd1),.rd2(rd2),.a1(instrD[25:21]),.a2(instrD[20:16]),.a3(writeregW),.wrenable(regwriteW),.clk(clk),.wr(resultW));
     signExtend signextend(.out(signimmD),.in(instrD[15:0]));
     adder jumpadd(.sum(pcbranchD),.a(signimmD),.b(pcplus1D));
     assign rsD = instrD[25:21];
     assign rtD = instrD[20:16];
     assign rdD = instrD[15:11];
-    mux2x1 read1(.out(equalidA),.q0(rd1),.q1(aluoutM),.sel(forwardAD));
-    mux2x1 read2(.out(equalidB),.q0(rd2),.q1(aluoutM),.sel(forwardBD));
-    equalCheck equalid(.a(equalidA),.b(equalidB),.equalcheck(equalID));
-    flipflop #(111) decodereg(.q(inex),.d({equalidA,equalidB,signimmD,rsD,rtD,rdD}),.clk(clk),.reset(flushE | reset));
+    mux2x1 read1(.out(equaldA),.q0(rd1),.q1(aluoutM),.sel(forwardAD));
+    mux2x1 read2(.out(equaldB),.q0(rd2),.q1(aluoutM),.sel(forwardBD));
+    equalCheck equald(.a(equaldA),.b(equaldB),.equalcheck(equalD));
+    flipflop #(111) decodereg(.q(inex),.d({equaldA,equaldB,signimmD,rsD,rtD,rdD}),.clk(clk),.reset(flushE | reset));
     assign rd1E = inex[111:79];
     assign rd2E = inex[78:47];
     assign rsE = inex[14:10];
@@ -85,13 +84,13 @@ module DatapathPipe(
     flipflop #(69) readflop(.q(readin),.d({aluoutE,writedataE,writeregE}),.clk(clk),.reset(reset));
     assign aluoutM = readin[68:37];
     assign writedataM = readin[36:5];
-    assign writeRegM= readin[4:0];
+    assign writeregM= readin[4:0];
 
     //data memory
     DataMemory datamem(.rd(readdataM),.wd(writedataM),.clk(clk),.we(memwriteM));
-    flipflop #(69) execflop(.q(writein),.d({readdataM,aluoutM,writeRegM}),.clk(clk),.reset(reset));
+    flipflop #(69) execflop(.q(writein),.d({readdataM,aluoutM,writeregM}),.clk(clk),.reset(reset));
 
-    assign writeRegW = writein[4:0];
+    assign writeregW = writein[4:0];
     assign readdataW = writein[68:37];
     assign aluoutW = writein[36:5];
 

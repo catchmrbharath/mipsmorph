@@ -1,41 +1,24 @@
-module controller (
-	output memtoreg, 
-	output memwrite,
-	output pcsrc,
-	output alusrc,
-	output regdst,
-	output regwrite,
-	output [2:0] alucontrol,
+module controllerPipe (
+	/* decode stage */
 	output pcsrcD,
-	output jump,
-	
 	/* execute stage */
-	
-	output aluSrcE, 
-	output regDstE,
+	output alusrcE, 
+	output regdstE,
 	output [2:0] alucontrolE,
-	
 	/* memory stage */
-	
-	output memWriteM,
-	
+	output memwriteM,
 	/* write stage */
-	
 	output regwriteW, 
 	output memtoregW,
-	
 	/* hazard unit input */
-	
 	output branchD,
 	output regwriteE,
 	output memtoregE,
 	output regwriteM,
-	
 	/* inputs */
-	
 	input [5:0] op,
 	input [5:0] funct,
-	input equalID,
+	input equalD,
 	input flushE,
 	input clk,
 	input reset );
@@ -51,6 +34,8 @@ module controller (
 	
 	// Memory stage temps
 	wire memtoregM;
+	
+	wire jump; // ????
 	
 	maindec md ( 	.op(op), 
 					.memtoreg(memtoregD), 
@@ -81,6 +66,6 @@ module controller (
 							.clk(clk),
 							.reset(reset) );
 	
-	assign pcsrcD = branchD & equalID;
+	assign pcsrcD = branchD & equalD;
 	
 endmodule
