@@ -1,4 +1,4 @@
-module datapath(
+module DatapathPipe(
     input clk,reset,
     /* control unit inputs */
     input pcsrcD,
@@ -16,9 +16,12 @@ module datapath(
     input flushE,
     input [1:0] forwardAE,
     input [1:0] forwardBE,
+
+	/* outputs */
+	
     output equalID,
     output [5:0] op,funct,
-    output [4:0] rsD,rtD,rsE,rtE, writeregE);
+    output [4:0] rsD,rtD,rsE,rtE, writeregE, writeRegM, writeRegW);
     
     /* temporary stuff */
     wire[31:0] resultW;
@@ -34,7 +37,7 @@ module datapath(
     wire[31:0] pcplus1D;
     wire[31:0] rd1;
     wire[31:0] rd2;
-    wire[4:0] writeRegW;
+    //wire[4:0] writeRegW; // should be an output along with writeRegM
     wire[31:0] aluoutM;
     wire[31:0] equalidA;
     wire[31:0] equalidB;
@@ -43,7 +46,7 @@ module datapath(
     wire[31:0] signimmE;
     wire[31:0] srcAE;
     wire[31:0] srcBE;
-    wire[31:0] writedataE;
+	wire[31:0] writedataE;
     wire[31:0] writedataM;
     wire[95:0] readin;
     
@@ -59,7 +62,7 @@ module datapath(
     assign pcplus1D = idin[31:0];
     assign op = instrD[31:26];
     assign funct = instrD[5:0];
-    regfile regmem(.rd1(rd1),.rd2(rd2),.a1(instrD[25:21]),.a2(instrD[20:16]),.a3(writeregW),.wrenable(regwriteW),.clk(clk),.wr(resultW));
+    regfile regmem(.rd1(rd1),.rd2(rd2),.a1(instrD[25:21]),.a2(instrD[20:16]),.a3(writeRegW),.wrenable(regwriteW),.clk(clk),.wr(resultW));
     signExtend signextend(.out(signimmD),.in(instrD[15:0]));
     adder jumpadd(.sum(pcbranchD),.a(signimmD),.b(pcplus1D));
     assign rsD = instrD[25:21];
@@ -82,11 +85,11 @@ module datapath(
     flipflop #(69) readflop(.q(readin),.d({aluoutE,writedataE,writeregE}),.clk(clk),.reset(reset));
     assign aluoutM = readin[68:37];
     assign writedataM = readin[36:5];
-    assign writeregM= readin[4:0];
+    assign writeRegM= readin[4:0];
 
     //data memory
     DataMemory datamem(.rd(readdataM),.wd(writedataM),.clk(clk),.we(memwriteM));
-    flipflop #(69) execflop(.q(writein),.d({readdataM,aluoutM,writeregM}),.clk(clk),.reset(reset));
+    flipflop #(69) execflop(.q(writein),.d({readdataM,aluoutM,writeRegM}),.clk(clk),.reset(reset));
 
     assign writeRegW = writein[4:0];
     assign readdataW = writein[68:37];
