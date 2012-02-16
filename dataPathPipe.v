@@ -24,16 +24,15 @@ module DatapathPipe(
     output [4:0] rsD,rtD,rsE,rtE, writeregE, writeregM, writeregW );
     
     /* temporary stuff */
+    wire [4:0] rdD;
     wire[31:0] resultW;
     wire[31:0] pcplus1;
     wire[31:0] pcnew;
     wire[31:0] pcbranchD;
     wire[31:0] pcF;
     wire[31:0] RD;
-    wire clearF;
-    assign clearF = reset | stallD;
     wire [63:0] idin; // input tot he id stage
-    wire[31:0] instrD;
+    reg [31:0] instrD;
     wire[31:0] pcplus1D;
     wire[31:0] rd1;
     wire[31:0] rd2;
@@ -44,20 +43,31 @@ module DatapathPipe(
     wire[31:0] rd1E;
     wire[31:0] rd2E;
     wire[31:0] signimmE;
+    wire[31:0] signimmD;
     wire[31:0] srcAE;
     wire[31:0] srcBE;
 	wire[31:0] writedataE;
     wire[31:0] writedataM;
-    wire[95:0] readin;
+    wire[68:0] readin;
+    wire[110:0] inex;
+    wire [4:0] rdE;
+    wire [31:0] aluoutE;
+    wire [68:0] writein;
+    wire [31:0] readdataM;
+    wire [31:0] readdataW;
+    wire [31:0] aluoutW;
+    initial
+        instrD = 8000;
 
 
 
     mux2x1 #(32) pcsel(.out(pcnew),.q0(pcplus1),.q1(pcbranchD),.sel(pcsrcD));
-    flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(stallF));
-    adder pcadd(.sum(pcplus1),.a(pcnew),.b(1'b1));
+    flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(~stallF));
+    adder pcadd(.sum(pcplus1),.a(pcF),.b(32'b1));
     instr #(32) instrmem(.out(RD),.address(pcF[5:0]));
-    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(pcsrcD),.reset(clearF));
-    assign instrD = idin[63:32];
+    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(~stallD),.reset(reset | pcsrcD));
+    always @(idin)
+    instrD = idin[63:32];
     assign pcplus1D = idin[31:0];
     assign op = instrD[31:26];
     assign funct = instrD[5:0];
@@ -77,7 +87,7 @@ module DatapathPipe(
     assign rtE = inex[9:5];
     assign rdE = inex[4:0];
     assign signimmE = inex[46:15];
-    mux2x1 #(32) writemux(.out(writeregE),.q0(rtE),.q1(rdE),.sel(regdstE));
+    mux2x1 #(5) writemux(.out(writeregE),.q0(rtE),.q1(rdE),.sel(regdstE));
     mux4x1 #(32) srcamux(.out(srcAE),.q0(rd1E),.q1(resultW),.q2(aluoutM),.q3(32'b0),.sel(forwardAE));
     mux4x1 #(32) writedataEmux(.out(writedataE),.q0(rd2E),.q1(resultW),.q2(aluoutM),.q3(32'b0),.sel(forwardBE));
     alu ALU(.ALUout(aluoutE),.zeroFlag(zero),.srcA(srcAE),.srcB(srcBE),.aluControl(alucontrolE));
@@ -94,7 +104,7 @@ module DatapathPipe(
     assign readdataW = writein[68:37];
     assign aluoutW = writein[36:5];
 
-    mux2x1 #(32) resultmux(.out(resultW),.q0(aluoutW),.q1(readdataW),.clk(clk),.reset(reset));
+    mux2x1 #(32) resultmux(.out(resultW),.q0(aluoutW),.q1(readdataW),.sel(memtoregW));
 
 
 
