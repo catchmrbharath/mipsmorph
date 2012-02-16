@@ -32,7 +32,7 @@ module DatapathPipe(
     wire[31:0] pcF;
     wire[31:0] RD;
     wire [63:0] idin; // input tot he id stage
-    reg [31:0] instrD;
+    wire [31:0] instrD;
     wire[31:0] pcplus1D;
     wire[31:0] rd1;
     wire[31:0] rd2;
@@ -56,8 +56,6 @@ module DatapathPipe(
     wire [31:0] readdataM;
     wire [31:0] readdataW;
     wire [31:0] aluoutW;
-    initial
-        instrD = 8000;
 
 
 
@@ -65,9 +63,8 @@ module DatapathPipe(
     flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(~stallF));
     adder pcadd(.sum(pcplus1),.a(pcF),.b(32'b1));
     instr #(32) instrmem(.out(RD),.address(pcF[5:0]));
-    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(~stallD),.reset(reset | pcsrcD));
-    always @(idin)
-    instrD = idin[63:32];
+    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(~stallD),.reset(reset | pcsrcD),.clk(clk));
+    assign instrD = idin[63:32];
     assign pcplus1D = idin[31:0];
     assign op = instrD[31:26];
     assign funct = instrD[5:0];

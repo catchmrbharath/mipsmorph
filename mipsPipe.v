@@ -13,8 +13,8 @@ module mipsPipe (
 	
 	controllerPipe c ( 	.clk(clk),
 						.reset(reset),
-						.op(instr[31:26]),
-		 				.funct(instr[5:0]),
+						.op(op),
+		 				.funct(funct),
 						.equalD(equalD),
 						.flushE(flushE),
 						.pcsrcD(pcsrcD),

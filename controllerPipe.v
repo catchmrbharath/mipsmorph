@@ -51,18 +51,18 @@ module controllerPipe (
 				.aluop(aluop),
 				.alucontrol(alucontrolD) );
 	
-	flipflop #(8) decodeFF (.q( {regwriteD, memtoregD, memwriteD, alucontrolD, alusrcD, regdstD} ),
-							.d( {regwriteE, memtoregE, memwriteE, alucontrolE, alusrcE, regdstE} ),
+	flipflopclr #(8) decodeFF (.d( {regwriteD, memtoregD, memwriteD, alucontrolD, alusrcD, regdstD} ),
+							.q( {regwriteE, memtoregE, memwriteE, alucontrolE, alusrcE, regdstE} ),
 							.clk(clk),
-							.reset(flushE | reset) );
+							.reset(reset),.clear(flushE) );
 							
-	flipflop #(3) executeFF (	.q( {regwriteE, memtoregE, memwriteE} ),
-								.d( {regwriteM, memtoregM, memwriteM} ),
+	flipflop #(3) executeFF (	.d( {regwriteE, memtoregE, memwriteE} ),
+								.q( {regwriteM, memtoregM, memwriteM} ),
 								.clk(clk),
 								.reset(reset) );
 								
-	flipflop #(2) writeFF (	.q( {regwriteM, memtoregM} ),
-							.d( {regwriteW, memtoregW} ),
+	flipflop #(2) writeFF (	.d( {regwriteM, memtoregM} ),
+							.q( {regwriteW, memtoregW} ),
 							.clk(clk),
 							.reset(reset) );
 	
