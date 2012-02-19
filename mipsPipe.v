@@ -3,7 +3,7 @@ module mipsPipe (
 	input reset );
 	
 	wire [31:0] instr;
-	wire equalD, flushE, pcsrcD, regdstE, alusrcE, memwriteM, regwriteW, memtoregW, branchD, regwriteE, memtoregE, regwriteM;
+	wire equalD, flushE, pcsrcD, regdstE, alusrcE, memwriteM, regwriteW, memtoregW, branchD, regwriteE, memtoregE, regwriteM,memtoregM;
 	wire [2:0] alucontrolE;
 	
 	wire stallF, stallD, forwardAD, forwardBD;
@@ -27,7 +27,8 @@ module mipsPipe (
 						.branchD(branchD),
 						.regwriteE(regwriteE),
 						.memtoregE(memtoregE),
-						.regwriteM(regwriteM) );
+						.regwriteM(regwriteM), 
+                        .memtoregM(memtoregM));
 	
 	DatapathPipe dp (	.clk(clk),
 						.reset(reset),
@@ -74,6 +75,7 @@ module mipsPipe (
 				.rtE(rtE),
 				.writeregE(writeregE),
 				.writeregM(writeregM),
-				.writeregW(writeregW) );
+				.writeregW(writeregW), 
+                .memtoregM(memtoregM));
 	
 endmodule
