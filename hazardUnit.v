@@ -17,7 +17,8 @@ module hazard (
 	input [4:0] rtE,
 	input [4:0] writeregE,
 	input [4:0] writeregM,
-	input [4:0] writeregW );
+	input [4:0] writeregW,
+    input memtoregM);
 
 	wire lwstall, branchstall;
 	reg [1:0] forwardAE, forwardBE; 
@@ -48,12 +49,18 @@ module hazard (
 	assign forwardBD = (rtD != 0) & (rtD == writeregM) & regwriteM;
 
 	assign lwstall = (((rsD == rtE) | (rtD == rtE)) & memtoregE);
-	assign branchstall = (branchD & regwriteE & (writeregE == rsD | writeregE == rtD)) | (branchD & memtoregM & (writeregM == rsD | writeregM == rtD));		
+    assign branchstalltemp = (branchD & regwriteE & ((writeregE == rsD) | (writeregE == rtD))); 
+    assign branchstalltemp2 = (branchD & memtoregM & ((writeregM == rsD) | (writeregM == rtD)));		
+
+	assign branchstall = (branchD & regwriteE & ((writeregE == rsD) | (writeregE == rtD))) | (branchD & memtoregM & ((writeregM == rsD) | (writeregM == rtD)));		
     always @ (lwstall or branchstall)
-	assign stallF = lwstall | branchstall;
+    begin
+	    stallF = lwstall | branchstall;
+        $display($time,,,,"lwstall = %d branchstall = %d",lwstall,memtoregM);
+    end
 
     always @ (lwstall or branchstall)
-	assign stallD = lwstall | branchstall;
+	    stallD = lwstall | branchstall;
 	assign flushE = lwstall | branchstall;
 
 endmodule
