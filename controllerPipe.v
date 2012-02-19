@@ -15,6 +15,7 @@ module controllerPipe (
 	output regwriteE,
 	output memtoregE,
 	output regwriteM,
+    output memtoregM,
 	/* inputs */
 	input [5:0] op,
 	input [5:0] funct,
@@ -33,7 +34,6 @@ module controllerPipe (
 	wire memwriteE;
 	
 	// Memory stage temps
-	wire memtoregM;
 	
 	wire jump; // ????
 	
