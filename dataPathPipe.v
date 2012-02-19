@@ -87,6 +87,7 @@ module DatapathPipe(
     mux2x1 #(5) writemux(.out(writeregE),.q0(rtE),.q1(rdE),.sel(regdstE));
     mux4x1 #(32) srcamux(.out(srcAE),.q0(rd1E),.q1(resultW),.q2(aluoutM),.q3(32'b0),.sel(forwardAE));
     mux4x1 #(32) writedataEmux(.out(writedataE),.q0(rd2E),.q1(resultW),.q2(aluoutM),.q3(32'b0),.sel(forwardBE));
+    mux2x1 #(32) srcbmux(.out(srcBE),.q0(writedataE),.q1(signimmE),.sel(alusrcE));
     alu ALU(.ALUout(aluoutE),.zeroFlag(zero),.srcA(srcAE),.srcB(srcBE),.aluControl(alucontrolE));
     flipflop #(69) readflop(.q(readin),.d({aluoutE,writedataE,writeregE}),.clk(clk),.reset(reset));
     assign aluoutM = readin[68:37];
@@ -94,7 +95,7 @@ module DatapathPipe(
     assign writeregM= readin[4:0];
 
     //data memory
-    DataMemory datamem(.rd(readdataM),.wd(writedataM),.clk(clk),.we(memwriteM));
+    DataMemory #(100) datamem(.rd(readdataM),.wd(writedataM),.clk(clk),.we(memwriteM),.address(aluoutM));
     flipflop #(69) execflop(.q(writein),.d({readdataM,aluoutM,writeregM}),.clk(clk),.reset(reset));
 
     assign writeregW = writein[4:0];
