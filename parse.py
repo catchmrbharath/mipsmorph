@@ -12,7 +12,7 @@ def binary(x,bits=5):
         return ans
 
 
-f = open("instr.txt")
+f = open("fib.txt")
 inst= {}
 inst["lw"]="100011"
 inst["sw"]="101011"
@@ -32,17 +32,17 @@ for lines in f:
     if(len(decode)==2):
         bytecode = inst[decode[0]]+binary(int(decode[1]),26)
     elif decode[0] in instkeys:
-        rs = int(decode[1][1:])
-        rt = int(decode[2][1:])
+        rt = int(decode[1][1:])
+        rs = int(decode[2][1:])
         imm = int(decode[3])
         bytecode = inst[decode[0]]+ binary(rs) + binary(rt) + binary(imm,16)
         
 
     else:
         bytecode = bytecode+"000000"
-        rs = int(decode[1][1:])
-        rt = int(decode[2][1:])
-        rd = int(decode[3][1:])
+        rd = int(decode[1][1:])
+        rs = int(decode[2][1:])
+        rt = int(decode[3][1:])
         bytecode =bytecode+binary(rs)+binary(rt)+binary(rd)+"00000"
         bytecode = bytecode+funct[decode[0]]
     print bytecode
