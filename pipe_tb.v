@@ -23,7 +23,7 @@ module pipe_tb ();
 		$dumpon;
 		$dumpvars;
 		
-		#1000
+		#2000
 		$dumpoff;
 		$finish;
 	end
