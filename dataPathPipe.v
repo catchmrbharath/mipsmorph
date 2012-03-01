@@ -1,7 +1,6 @@
 module DatapathPipe(
     input clk,reset,
     /* control unit inputs */
-    input pcsrcD,
     input regdstE,
     input alusrcE,
     input [2:0] alucontrolE,
@@ -16,12 +15,15 @@ module DatapathPipe(
     input flushE,
     input [1:0] forwardAE,
     input [1:0] forwardBE,
+    input brbitF,
+    input branchCorrect,
 
 	/* outputs */
 	
     output equalD,
     output [5:0] op,funct,
-    output [4:0] rsD,rtD,rsE,rtE, writeregE, writeregM, writeregW );
+    output [4:0] rsD,rtD,rsE,rtE, writeregE, writeregM, writeregW,
+    output [31:0] pcD,pcE);
     
     /* temporary stuff */
     wire [4:0] rdD;
@@ -29,9 +31,8 @@ module DatapathPipe(
     wire[31:0] pcplus1;
     wire[31:0] pcnew;
     wire[31:0] pcbranchD;
-    wire[31:0] pcF;
     wire[31:0] RD;
-    wire [63:0] idin; // input tot he id stage
+    wire [95:0] idin; // input tot he id stage
     wire [31:0] instrD;
     wire[31:0] pcplus1D;
     wire[31:0] rd1;
@@ -56,15 +57,21 @@ module DatapathPipe(
     wire [31:0] readdataM;
     wire [31:0] readdataW;
     wire [31:0] aluoutW;
+    wire [31:0] pcD;
+    wire [31:0] pcbr;
+    wire [31:0] pcF;
 
 
 
-    mux2x1 #(32) pcsel(.out(pcnew),.q0(pcplus1),.q1(pcbranchD),.sel(pcsrcD));
+    mux2x1 #(32) pcsel(.out(pcnew),.q0(pcplus1),.q1(pcbranchD),.sel(branchCorrect));
     flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(~stallF));
-    adder pcadd(.sum(pcplus1),.a(pcF),.b(32'b1));
-    instr #(32) instrmem(.out(RD),.address(pcF[5:0]));
-    flipflopE #(64) fetchreg(.q(idin),.d({RD,pcplus1}),.enable(~stallD),.reset(reset | pcsrcD),.clk(clk));
+    mux2x1 #(32) pcbrselect(.out(pcbr),.q0(pcF),.q1(pcbranchD),.sel(brbitF));
+    flipflop #(32) pcEFF(.q(pcE),.d(pcD),.clk(clk),.reset(reset));
+    adder pcadd(.sum(pcplus1),.a(pcbr),.b(32'b1));
+    instr #(32) instrmem(.out(RD),.address(pcbr[5:0]));
+    flipflopE #(96) fetchreg(.q(idin),.d({pcbr,RD,pcplus1}),.enable(~stallD),.reset(reset),.clk(clk));
     assign instrD = idin[63:32];
+    assign pcD = idin[95:64];
     assign pcplus1D = idin[31:0];
     assign op = instrD[31:26];
     assign funct = instrD[5:0];

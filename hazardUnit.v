@@ -18,7 +18,8 @@ module hazard (
 	input [4:0] writeregE,
 	input [4:0] writeregM,
 	input [4:0] writeregW,
-    input memtoregM);
+    input memtoregM,
+    input branchCorrectE);
 
 	wire lwstall, branchstall;
 	reg [1:0] forwardAE, forwardBE; 
@@ -61,6 +62,6 @@ module hazard (
 
     always @ (lwstall or branchstall)
 	    stallD = lwstall | branchstall;
-	assign flushE = lwstall | branchstall;
+	assign flushE = lwstall | branchstall | branchCorrectE;
 
 endmodule

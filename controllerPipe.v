@@ -16,19 +16,26 @@ module controllerPipe (
 	output memtoregE,
 	output regwriteM,
     output memtoregM,
+    output isBranch,
+    output branchCorrect,
+    output pcsrcE,
+    output branchE,
+    output branchCorrectE,
 	/* inputs */
 	input [5:0] op,
 	input [5:0] funct,
 	input equalD,
 	input flushE,
 	input clk,
-	input reset );
+	input reset,
+    input brbitD);
 	
 	wire [1:0] aluop;
 	
 	// Decode stage temps
 	wire regwriteD, memtoregD, memwriteD, alusrcD, regdstD, branchD;
 	wire [2:0] alucontrolD;
+    assign isBranch = (op==6'b000100);
 	
 	// Execute stage temps
 	wire memwriteE;
@@ -65,7 +72,12 @@ module controllerPipe (
 							.q( {regwriteW, memtoregW} ),
 							.clk(clk),
 							.reset(reset) );
+    flipflop #(2) exbrFF( .q({pcsrcE,branchE}),.d({pcsrcD,branchD}),.clk(clk),.reset(reset));
+    flipflop #(1) brcorrectFF(.q(branchCorrectE),.d(branchCorrect),.clk(clk),.reset(reset));
 	
 	assign pcsrcD = branchD & equalD;
+    assign tempbranchpred =  (equalD^brbitD);
+    assign branchCorrect = branchD & tempbranchpred;
+    
 	
 endmodule
