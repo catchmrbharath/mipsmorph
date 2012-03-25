@@ -1,12 +1,12 @@
 module top (
-	output [31:0] writedata, 
-	output [31:0] dataadr,
+	output [16:0] writedata, 
+	output [16:0] dataadr,
 	output memwrite,
 	input clk,
 	input reset );
 	
-	wire [31:0]  instr, readdata;
-    wire [31:0] pc;
+	wire [16:0]  instr, readdata;
+    wire [7:0] pc;
 	
 	mips mips(  .clk(clk),
 				.reset(reset),

@@ -1,24 +1,23 @@
 module mips (
-	output [31:0] pc,
+	output [7:0] pc,
 	output memwrite,
-	output [31:0] aluout,
-	output [31:0] writedata,
-	input [31:0] instr,
-	input [31:0] readdata,
+	output [16:0] aluout,
+	output [16:0] writedata,
+	input [16:0] instr,
+	input [16:0] readdata,
 	input clk, 
 	input reset );
 	
-	wire memtoreg, branch, alusrc, regdst, regwrite, jump;
+	wire memtoreg, branch, alusrc, regwrite, jump;
 	wire [2:0] alucontrol;
 	
-	controller c ( 	.op(instr[31:26]),
-	 				.funct(instr[5:0]),
+	controller c ( 	.op(instr[15:12]),
+	 				.funct(instr[2:0]),
 	 				.zero(zero),
 					.memtoreg(memtoreg),
 					.memwrite(memwrite),
 					.pcsrc(pcsrc),
 					.alusrc(alusrc),
-					.regdst(regdst),
 					.regwrite(regwrite),
 					.jump(jump),
 					.alucontrol(alucontrol) );
@@ -28,7 +27,6 @@ module mips (
 					.memtoreg(memtoreg),
 					.pcsrc(pcsrc),
 					.alusrc(alusrc),
-					.regdst(regdst),
 					.regwrite(regwrite),
 					.jump(jump),
 					.alucontrol(alucontrol),
