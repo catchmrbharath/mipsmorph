@@ -3,7 +3,6 @@ module controller (
 	output memwrite,
 	output pcsrc,
 	output alusrc,
-	output regdst,
 	output regwrite,
 	output jump,
 	output [2:0] alucontrol,
@@ -19,7 +18,6 @@ module controller (
 					.memwrite(memwrite), 
 					.branch(branch), 
 					.alusrc(alusrc), 
-					.regdst(regdst), 
 					.regwrite(regwrite), 
 					.jump(jump), 
 					.aluop(aluop) );

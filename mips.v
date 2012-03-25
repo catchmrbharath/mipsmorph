@@ -8,7 +8,7 @@ module mips (
 	input clk, 
 	input reset );
 	
-	wire memtoreg, branch, alusrc, regdst, regwrite, jump;
+	wire memtoreg, branch, alusrc, regwrite, jump;
 	wire [2:0] alucontrol;
 	
 	controller c ( 	.op(instr[15:12]),
@@ -18,7 +18,6 @@ module mips (
 					.memwrite(memwrite),
 					.pcsrc(pcsrc),
 					.alusrc(alusrc),
-					.regdst(regdst),
 					.regwrite(regwrite),
 					.jump(jump),
 					.alucontrol(alucontrol) );
@@ -28,7 +27,6 @@ module mips (
 					.memtoreg(memtoreg),
 					.pcsrc(pcsrc),
 					.alusrc(alusrc),
-					.regdst(regdst),
 					.regwrite(regwrite),
 					.jump(jump),
 					.alucontrol(alucontrol),
