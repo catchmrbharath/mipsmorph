@@ -12,7 +12,7 @@ def binary(x,bits=5):
         return ans
 
 
-f = open("fib.txt")
+f = open("conv.txt")
 inst= {}
 inst["lw"]="100011"
 inst["sw"]="101011"
@@ -25,6 +25,7 @@ funct["sub"] = "100010"
 funct["and"] = "100100"
 funct["or"] = "100101"
 funct["slt"] = "101010"
+funct["mul"] = "100001"
 instkeys = inst.keys()
 for lines in f:
     bytecode = ""

@@ -1,8 +1,8 @@
-`define size 31
 module branchMem #(parameter MEM=32)
 (
     output out,
-    input [5:0] address,
+    input [5:0] addrD,
+    input [5:0] addrE,
     input wd,we,clk);
 
     reg [MEM-1:0]  mem;
@@ -26,10 +26,10 @@ module branchMem #(parameter MEM=32)
         mem[16]=0;
         end
 
-    assign out= mem[address];
+    assign out= mem[addrD];
     always @(posedge clk)
         if(we)
-            mem[address] = wd;
+            mem[addrE] = wd;
         else begin
         end
     

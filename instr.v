@@ -7,7 +7,8 @@ module instr #(parameter MEM=18)
     reg [`size:0] mem[MEM-1:0];
     initial
     begin
-        $readmemh("instruction.txt",mem);
+        //$readmemh("instruction.txt",mem);
+        $readmemb("convinstr.txt",mem);
 		#5
 		$display("INSTRUCTION MEMORY");
 		$display("%h", mem[0]);

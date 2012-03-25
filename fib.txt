@@ -2,7 +2,8 @@ addi R1 R0 1
 sw R0 R0 0
 addi R2 R0 1
 addi R28 R0 1
-addi R30 R0 1
+sw R2 R28 0
+addi R30 R0 2
 addi R27 R0 10
 add R3 R2 R1
 sw R3 R30 0

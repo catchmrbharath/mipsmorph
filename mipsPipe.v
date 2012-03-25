@@ -95,8 +95,8 @@ module mipsPipe (
 				.writeregW(writeregW), 
                 .memtoregM(memtoregM),
                 .branchCorrectE(branchCorrectE));
-    branchMem #(32) bm( .out(pcbranchpred),.address(bradd),.we(branchE),.wd(pcsrcE),.clk(clk));
-    mux2x1 #(6) baddsel(.out(bradd),.q0(pcD),.q1(pcE),.sel(branchE));
+    branchMem #(32) bm( .out(pcbranchpred),.addrD(pcD),.addrE(pcE),.we(branchE),.wd(pcsrcE),.clk(clk));
+    branchmux br (.out(
     
 	
 endmodule

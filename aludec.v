@@ -13,6 +13,7 @@ always @(*)
             6'b100100: alucontrol<=3'b000; // AND
             6'b100101: alucontrol<=3'b001; //OR
             6'b101010: alucontrol<=3'b111; //SLT
+            6'b100001: alucontrol<=3'b011; //mult
             default: alucontrol<=3'bxxx;
         endcase
     endcase
