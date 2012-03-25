@@ -1,7 +1,7 @@
 module alu(
-    output reg [31:0] ALUout,
+    output reg [15:0] ALUout,
     output reg zeroFlag,
-    input[31:0] srcA,srcB,
+    input[15:0] srcA,srcB,
     input[2:0] aluControl);
 
 always @(*)

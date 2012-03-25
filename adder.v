@@ -1,4 +1,4 @@
-`define datawidth 32
+`define datawidth 8
 module adder(
     output[`datawidth-1:0] sum,
     input[`datawidth-1:0] a,
