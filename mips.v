@@ -1,5 +1,5 @@
 module mips (
-	output [16:0] pc,
+	output [7:0] pc,
 	output memwrite,
 	output [16:0] aluout,
 	output [16:0] writedata,

@@ -6,7 +6,7 @@ module top (
 	input reset );
 	
 	wire [16:0]  instr, readdata;
-    wire [16:0] pc;
+    wire [7:0] pc;
 	
 	mips mips(  .clk(clk),
 				.reset(reset),
