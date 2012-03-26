@@ -4,13 +4,16 @@ module instr #(parameter MEM=18)
     output [`size-1:0] out,
     input [7:0] address );
 
-    reg [`size-1:0] mem[MEM-1:0];
+    reg [8-1:0] mem[MEM-1:0];
     initial
     begin
-        $readmemh("instruction.txt",mem);
+        $readmemb("fib.txt",mem);
 		#5
 		$display("INSTRUCTION MEMORY");
-		$display("%h", mem[0]);
+        #5
+		$display("%b", mem[0]);
+        #5
+        $display("%b", mem[1]);
     end
-    assign out= mem[address];
+    assign out= {mem[address],mem[address+1]};
 endmodule
