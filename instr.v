@@ -2,7 +2,7 @@
 module instr #(parameter MEM=18)
 (
     output [`size-1:0] out,
-    input [5:0] address );
+    input [7:0] address );
 
     reg [`size-1:0] mem[MEM-1:0];
     initial

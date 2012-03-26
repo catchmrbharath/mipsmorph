@@ -1,5 +1,5 @@
 `define datawidth 16
-`define addrsize 8
+`define addrsize 16
 module DataMemory #(parameter MEM=64)
 (
     output[`datawidth-1:0] rd,
@@ -11,13 +11,13 @@ module DataMemory #(parameter MEM=64)
     reg[`datawidth-1:0] mem[MEM-1:0];
 
 	initial begin
-		mem[0]=32'h00000000;
+		mem[0]=16'd0;
 	end
 
-    assign rd = mem[address[31:0]]; // WORD ALIGNED
+    assign rd = mem[address[15:0]]; // WORD ALIGNED
 
     always @(negedge clk)
         if(we)
-            mem[address[31:0]]<=wd;
+            mem[address[15:0]]<=wd;
   
 endmodule

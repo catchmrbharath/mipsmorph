@@ -7,12 +7,12 @@ module regfile #(parameter MEM=8)
     input [`datawidth-1:0] wr,
     input clk,wrenable);
 
-    reg[8-1:0] registers[MEM-1:0];
+    reg[15:0] registers[MEM-1:0];
     initial
         registers[0]=0;
     assign rd1 = registers[a1];
     assign rd2 = registers[a2];
-    assign rd3 = registers[a3];
+    assign rd3 = registers[a4];
     always @ (negedge clk)
         if(wrenable) 
 			registers[a3]<=wr;

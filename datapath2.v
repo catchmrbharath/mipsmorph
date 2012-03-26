@@ -2,7 +2,7 @@
 module Datapath(
     input clk,reset,
     input memtoreg,pcsrc,
-    input alusrc,regdst,
+    input alusrc,
     input regwrite,jump,
     input [2:0] alucontrol,
     output zero,
@@ -12,9 +12,9 @@ module Datapath(
     output [7:0] pc,
     output [15:0] switchout,
     input [2:0] switchin);
-    wire[2:0] writereg;
+    
     wire[7:0] pcnext,pcnextbr,pcplus1,pcbranch;
-    wire[7:0] signimm,signimmsh; //are the same
+    wire[7:0] signimm; //are the same
     wire[`datawidth-1:0] srcA,srcB; 
     wire[`datawidth-1:0] result;
     flipflop #(8) pcreg(.q(pc),.d(pcnext),.clk(clk),.reset(reset));
@@ -30,7 +30,7 @@ module Datapath(
    signExtend se(.out(signimm),.in(instr[5:0]));
    
    //alu
-   mux2x1 #(16) srcbmux(.out(srcB),.q0(writedata),.q1({{8{signimm[8]}},signimm}),.sel(alusrc));
+   mux2x1 #(16) srcbmux(.out(srcB),.q0(writedata),.q1({{8{signimm[7]}},signimm}),.sel(alusrc));
    alu alu(.ALUout(aluout),.zeroFlag(zero),.srcA(srcA),.srcB(srcB),.aluControl(alucontrol));
 
 

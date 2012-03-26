@@ -14,36 +14,36 @@ def binary(x,bits=5):
 
 f = open("instr.txt")
 inst= {}
-inst["lw"]="100011"
-inst["sw"]="101011"
-inst["beq"]="000100"
-inst["addi"]="001000"
-inst["j"] = "000010"
+inst["lw"]="1011"
+inst["sw"]="1111"
+inst["beq"]="1000"
+inst["addi"]="0100"
+inst["j"] = "0010"
 funct={}
-funct["add"] = "100000"
-funct["sub"] = "100010"
-funct["and"] = "100100"
-funct["or"] = "100101"
-funct["slt"] = "101010"
+funct["add"] = "000"
+funct["sub"] = "010"
+funct["and"] = "100"
+funct["or"] = "101"
+funct["slt"] = "010"
 instkeys = inst.keys()
 for lines in f:
     bytecode = ""
     decode = lines.split()
     if(len(decode)==2):
-        bytecode = inst[decode[0]]+binary(int(decode[1]),26)
+        bytecode = inst[decode[0]]+binary(int(decode[1]),12)
     elif decode[0] in instkeys:
-        rs = int(decode[1][1:])
-        rt = int(decode[2][1:])
+        rd = int(decode[1][1:])
+        ra = int(decode[2][1:])
         imm = int(decode[3])
-        bytecode = inst[decode[0]]+ binary(rs) + binary(rt) + binary(imm,16)
+        bytecode = inst[decode[0]]+ binary(rd,3) + binary(ra,3) + binary(imm,6)
         
 
     else:
-        bytecode = bytecode+"000000"
-        rs = int(decode[1][1:])
-        rt = int(decode[2][1:])
-        rd = int(decode[3][1:])
-        bytecode =bytecode+binary(rs)+binary(rt)+binary(rd)+"00000"
+        bytecode = bytecode+"0000"
+        rd = int(decode[1][1:])
+        ra = int(decode[2][1:])
+        rb = int(decode[3][1:])
+        bytecode =bytecode+binary(rd)+binary(ra)+binary(rb)
         bytecode = bytecode+funct[decode[0]]
     print bytecode
         

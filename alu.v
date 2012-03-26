@@ -12,7 +12,7 @@ begin
         3'b000: ALUout=srcB & srcA;
         3'b001: ALUout=srcA | srcB;
         3'b111: ALUout= (srcA<srcB) ? 1:0;
-        3'bxxx: ALUout=0; //TODO:think of something else here
+        default: ALUout = 0; //TODO:think of something else here
     endcase
     if(ALUout==0)
         zeroFlag=1;

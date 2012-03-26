@@ -5,7 +5,7 @@ module top_tb ();
 	reg clk;
 	reg reset;
 	
-	wire [31:0] writedata, dataadr;
+	wire [15:0] writedata, dataadr;
 	wire memwrite;
 	
 	top dut(	.clk(clk),
