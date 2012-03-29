@@ -65,7 +65,7 @@ module DatapathPipe(
 
 
     mux4x1 #(32) pcsel(.out(pcnew),.q0(pcplus1),.q1(pcbranchD),.q2(pcplus1D),.q3(32'd0),.sel(brmuxsel));
-    flipflopE #(32) pcflip(.q(pcplus1D),.d(pcplus1),.clk(clk),.reset(reset),.enable(~stallF));
+    flipflopE #(32) pcplus1FF(.q(pcplus1D),.d(pcplus1),.clk(clk),.reset(reset),.enable(~stallF));
     flipflopE #(32) pcflip(.q(pcF),.d(pcnew),.clk(clk),.reset(reset),.enable(~stallF));
     mux2x1 #(32) pcbrselect(.out(pcbr),.q0(pcF),.q1(pcbranchD),.sel(brbitF));
     flipflop #(32) pcEFF(.q(pcE),.d(pcD),.clk(clk),.reset(reset));

@@ -19,6 +19,7 @@ module mipsPipe (
     wire branchCorrectE;
     wire brbitD;
     wire branchE;
+    wire [1:0] brmuxsel;
 	
 	controllerPipe c ( 	.clk(clk),
 						.reset(reset),
@@ -42,7 +43,8 @@ module mipsPipe (
                         .brbitD(pcbranchpred),
                         .pcsrcE(pcsrcE),
                         .branchE(branchE),
-                        .branchCorrectE(branchCorrectE));
+                        .branchCorrectE(branchCorrectE),
+                        .brmuxsel(brmuxsel));
 	
 	DatapathPipe dp (	.clk(clk),
 						.reset(reset),
@@ -72,7 +74,8 @@ module mipsPipe (
 						.writeregW(writeregW),
                         .pcD(pcD),
                         .pcE(pcE),
-                        .brbitF(pcbranchpred & branchD));
+                        .brbitF(pcbranchpred & branchD),
+                        .brmuxsel(brmuxsel));
 	
 	hazard h (	.stallF(stallF),
 				.stallD(stallD),
@@ -96,7 +99,6 @@ module mipsPipe (
                 .memtoregM(memtoregM),
                 .branchCorrectE(branchCorrectE));
     branchMem #(32) bm( .out(pcbranchpred),.addrD(pcD),.addrE(pcE),.we(branchE),.wd(pcsrcE),.clk(clk));
-    branchmux br (.out(
     
 	
 endmodule

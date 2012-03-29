@@ -28,7 +28,9 @@ module controllerPipe (
 	input flushE,
 	input clk,
 	input reset,
-    input brbitD);
+    input brbitD,
+    /* branch select mux*/
+    output reg [1:0] brmuxsel);
 	
 	wire [1:0] aluop;
 	
@@ -76,8 +78,20 @@ module controllerPipe (
     flipflop #(1) brcorrectFF(.q(branchCorrectE),.d(branchCorrect),.clk(clk),.reset(reset));
 	
 	assign pcsrcD = branchD & equalD;
-    assign tempbranchpred =  (equalD^brbitD);
+    assign tempbranchpred =  !(equalD^brbitD);
     assign branchCorrect = branchD & tempbranchpred;
+
+    /* branch prediction bits */
+    always @(branchD or equalD or tempbranchpred) begin
+        if(!branchD)
+            brmuxsel = 2'b00;
+        else if(branchCorrect)
+            brmuxsel = 2'b00;
+        else if(branchD & equalD & (!tempbranchpred))
+            brmuxsel = 2'b01;
+        else if(branchD & !equalD &(!tempbranchpred))
+            brmuxsel = 2'b10;
+    end
     
 	
 endmodule

@@ -8,9 +8,9 @@ lw R8 R6 5
 add R9 R5 R6
 lw R10 R9 0
 mul R15 R10 R8
-add R7 R7 R15
 addi R6 R6 1 
 slt R12 R6 R2
-sw R7 R0 12
+add R7 R7 R15
 addi R5 R5 1
 slt R13 R5 R1
+sw R7 R0 12

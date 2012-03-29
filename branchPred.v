@@ -24,6 +24,11 @@ module branchMem #(parameter MEM=32)
         mem[14]=0;
         mem[15]=0;
         mem[16]=0;
+        mem[17]=0;
+        mem[18]=0;
+        mem[19]=0;
+        mem[20]=0;
+        mem[21]=0;
         end
 
     assign out= mem[addrD];

@@ -19,7 +19,7 @@ module regfile #(parameter MEM=32)
     begin
         rd1 = registers[a1];
         rd2 = registers[a2];
-        $display($time,,,,"wrenable = %d registers[2] = %d a1 = %d",wrenable,rd1,a1);
+        $display($time,,,,"reg = ",registers[12]);
     end
     always @ (posedge clk)
     begin
