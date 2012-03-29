@@ -15,18 +15,19 @@ module branchPredictor (
 	wire [1:0] global_prediction;
 	wire [1:0] choice_prediction;
 	reg [11:0] path_history;
+	reg [9:0] last_pc_D;
 	wire [9:0] local_history;
 	wire prediction;
 	
-	reg [11:0] k;
+	reg [12:0] k;
 	
     initial begin
-		for (k = 0; k < 1023; k = k + 1) begin
+		for (k = 0; k < 1024; k = k + 1) begin
     		local_history_table[k] = 0;
 			local_pattern_table[k] = 0;
 		end
 		
-		for (k = 0; k < 4095; k = k + 1) begin
+		for (k = 0; k < 4096; k = k + 1) begin
     		global_pattern_table[k] = 0;
 			choice_pattern_table[k] = 0;
 		end
@@ -34,10 +35,11 @@ module branchPredictor (
 		path_history = 0;
 		last_local_history = 0;
 		last_path_history = 0;
+		last_pc_D = 0;
 		
 	end
 	
-	assign local_history = local_history_table[pc];
+	assign local_history = local_history_table[pc_D];
 	assign local_prediction = local_pattern_table[local_history];
 	
 	assign global_prediction = global_pattern_table[path_history];
@@ -51,14 +53,16 @@ module branchPredictor (
 	reg [11:0] last_path_history;
 
 	always @(posedge clk) begin
-		
-		path_history = path_history << 1;
-		path_history[11] = prediction;
-		last_local_history <= local_history;
-		last_path_history <= path_history;
 	
         if( update_enable ) begin
-			path_history[11] = update_value;
+			
+			path_history = path_history << 1;
+			path_history[0] = update_value;
+			last_local_history <= local_history_table[pc_E];
+			last_path_history <= path_history;
+			
+			local_history_table[pc_E] = { local_history_table[pc_E], update_value };
+			
 			if( update_value == 1'b0 ) begin
 				if( local_pattern_table[last_local_history] != 3'd0 )
             		local_pattern_table[last_local_history] <= local_pattern_table[last_local_history] - 3'd1;

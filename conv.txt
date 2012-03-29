@@ -1,5 +1,5 @@
-addi R1 R0 3
-addi R2 R0 3
+addi R1 R0 100
+addi R2 R0 100
 addi R5 R0 0
 addi R30 R0 1
 addi R6 R0 0
