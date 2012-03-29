@@ -98,7 +98,13 @@ module mipsPipe (
 				.writeregW(writeregW), 
                 .memtoregM(memtoregM),
                 .branchCorrectE(branchCorrectE));
-    branchMem #(32) bm( .out(pcbranchpred),.addrD(pcD),.addrE(pcE),.we(branchE),.wd(pcsrcE),.clk(clk));
-    
+
+    // branchMem #(32) bm( .out(pcbranchpred),.addrD(pcD),.addrE(pcE),.we(branchE),.wd(pcsrcE),.clk(clk));
+    branchPredictor bp (	.prediction(pcbranchpred),
+							.pc_D(pcD[9:0]),
+							.pc_E(pcE[9:0]),
+							.update_enable(branchE),
+							.update_value(pcsrcE),
+							.clk(clk) );
 	
 endmodule
